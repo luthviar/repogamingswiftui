@@ -27,5 +27,9 @@ import SwiftUI
         guard let results = response?.results else { return }
         searchedGames += results
     }
+    
+    func makeSearchedGamesEmpty() {
+        searchedGames = []
+    }
 }
 

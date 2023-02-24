@@ -99,14 +99,15 @@ struct ListGameView: View {
         }
         .searchable(text: $searchText, placement: .navigationBarDrawer, prompt: "Search")
         .onSubmit(of: .search) {
+            viewModel.makeSearchedGamesEmpty()
             loadPage()
         }
     }
     
     var searchResults: [GameItem] {
-        if searchText.isEmpty {
+        if searchText.isEmpty {            
             return viewModel.games
-        } else {            
+        } else {
             return viewModel.searchedGames
         }
     }
