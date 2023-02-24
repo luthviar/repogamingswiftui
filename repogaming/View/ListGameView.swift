@@ -9,12 +9,13 @@ import SwiftUI
 
 struct ListGameView: View {
     @StateObject private var viewModel = ListGameViewModel()
-    @State private var isLoading = false
+    @State private var isLoading: Bool = false
+    @State private var searchText: String = ""
     
     var body: some View {
         NavigationView {
             VStack {
-                List(viewModel.games) { game in
+                List(searchResults) { game in
                     NavigationLink(
                         destination: AboutView()
                     ) {
@@ -59,7 +60,7 @@ struct ListGameView: View {
                                 Text(game.name ?? "")
                                     .font(.system(size: 25, weight: .bold))
                                 
-                                Text(game.released ?? "")
+                                Text("Release: \(getReleaseDate(game))")
                                     .lineLimit(2)
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
@@ -96,13 +97,35 @@ struct ListGameView: View {
         .task {
             loadPage()
         }
+        .searchable(text: $searchText, placement: .navigationBarDrawer, prompt: "Search")
+        .onSubmit(of: .search) {
+            loadPage()
+        }
+    }
+    
+    var searchResults: [GameItem] {
+        if searchText.isEmpty {
+            return viewModel.games
+        } else {            
+            return viewModel.searchedGames
+        }
     }
     
     private func loadPage(next: Bool = false) {
-        if next { viewModel.currentPage += 1 }
+        if next {
+            if searchText.isEmpty {
+                viewModel.currentPage += 1
+            } else {
+                viewModel.currentPageSearched += 1
+            }
+        }
         isLoading = true
         Task {
-            try? await viewModel.loadGames()
+            if searchText.isEmpty {
+                try? await viewModel.loadGames()
+            } else {
+                try? await viewModel.loadSearchGames(text: searchText)
+            }
             isLoading = false
         }
     }
@@ -112,6 +135,30 @@ struct ListGameView: View {
         return isNeedIt
     }
     
+    private func getReleaseDate(_ gameItem: GameItem) -> String {
+        return gameItem.released?.changeDateFormat(from: "yyyy-MM-dd", to: "dd MMMM yyyy") ?? "-"
+    }
+    
+}
+
+struct SearchBar: View {
+    @Binding var searchText: String
+    var onSearchButtonClicked: () -> Void
+    
+    var body: some View {
+        HStack {
+            TextField("Search", text: $searchText, onCommit: {
+                onSearchButtonClicked()
+            })
+            .textFieldStyle(RoundedBorderTextFieldStyle())
+            Button(action: {
+                onSearchButtonClicked()
+            }, label: {
+                Text("Search")
+            })
+        }
+        .padding()
+    }
 }
 
 struct ListGameView_Previews: PreviewProvider {

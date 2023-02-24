@@ -28,6 +28,7 @@
 		2FC8739F29A8C431000B4B1D /* ListGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC8739E29A8C431000B4B1D /* ListGameView.swift */; };
 		2FC873A229A8C475000B4B1D /* ListGameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC873A129A8C475000B4B1D /* ListGameViewModel.swift */; };
 		2FC873A429A8C4C3000B4B1D /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC873A329A8C4C3000B4B1D /* AboutView.swift */; };
+		2FC873A729A8FA8D000B4B1D /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC873A629A8FA8D000B4B1D /* String.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 		2FC8739E29A8C431000B4B1D /* ListGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListGameView.swift; sourceTree = "<group>"; };
 		2FC873A129A8C475000B4B1D /* ListGameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListGameViewModel.swift; sourceTree = "<group>"; };
 		2FC873A329A8C4C3000B4B1D /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		2FC873A629A8FA8D000B4B1D /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,6 +179,7 @@
 		2FC8739A29A8C3EC000B4B1D /* Domainless */ = {
 			isa = PBXGroup;
 			children = (
+				2FC873A529A8FA85000B4B1D /* Extension */,
 				2F4A701E29A71746001355B4 /* repogamingApp.swift */,
 				2FC8739B29A8C401000B4B1D /* ApiService.swift */,
 			);
@@ -198,6 +201,14 @@
 				2FC873A129A8C475000B4B1D /* ListGameViewModel.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		2FC873A529A8FA85000B4B1D /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				2FC873A629A8FA8D000B4B1D /* String.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -350,6 +361,7 @@
 				2FC8739529A8C144000B4B1D /* AddedByStatus.swift in Sources */,
 				2FC8739729A8C185000B4B1D /* Tags.swift in Sources */,
 				2FC8739F29A8C431000B4B1D /* ListGameView.swift in Sources */,
+				2FC873A729A8FA8D000B4B1D /* String.swift in Sources */,
 				2FC8739329A8C127000B4B1D /* Stores.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
