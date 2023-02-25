@@ -37,7 +37,7 @@ struct AboutView: View {
                 
                 Spacer(minLength: 30)
                 
-                Text("This is the app for showing all cat breeds in the world. I hope it will fun and add to your new knowledge. Thank you.")
+                Text("This is the app for showing all games in the world. I hope it will fun and add to your new knowledge. Thank you.")
             }
             .padding()
         }
