@@ -17,7 +17,14 @@ struct ListGameView: View {
             VStack {
                 List(searchResults) { game in
                     NavigationLink(
-                        destination: AboutView()
+                        destination:
+                            DetailGameView(
+                                viewModel:
+                                    DetailGameViewModel(
+                                        gameId: game.id ?? 0,
+                                        gameName: game.name ?? ""
+                                    )
+                            )
                     ) {
                         HStack {
                             AsyncImage(url: URL(string: game.backgroundImage ?? "")) { phase in
@@ -105,7 +112,7 @@ struct ListGameView: View {
     }
     
     var searchResults: [GameItem] {
-        if searchText.isEmpty {            
+        if searchText.isEmpty {
             return viewModel.games
         } else {
             return viewModel.searchedGames

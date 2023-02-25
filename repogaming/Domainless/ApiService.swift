@@ -38,6 +38,30 @@ class ApiService {
         let response = Mapper<ListGameModel>().map(JSONString: String(data: data, encoding: .utf8) ?? "")
         return response
     }
+    
+    func fetchGameScreenshots(gameId: Int) async throws -> DetailGameScreenshotsModel? {
+        let urlString: String = urlDetailGame(gameId, toSreenshots: true)
+        guard let url = URL(string: urlString) else {
+            throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
+        }
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let response = Mapper<DetailGameScreenshotsModel>().map(JSONString: String(data: data, encoding: .utf8) ?? "")
+        return response
+    }
+    
+    func fetchDetailGame(id: Int) async throws -> DetailGameModel? {
+        let urlString: String = urlDetailGame(id)
+        guard let url = URL(string: urlString) else {
+            throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
+        }
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let response = Mapper<DetailGameModel>().map(JSONString: String(data: data, encoding: .utf8) ?? "")
+        return response
+    }
+    
+    private func urlDetailGame(_ gameId: Int, toSreenshots: Bool = false) -> String {
+        return "\(baseUrl)games/\(gameId)\(toSreenshots ? "/screenshots" : "" )?key=\(apiKey)\(toSreenshots ? pageSize20 : "" )"
+    }
 }
 
 
