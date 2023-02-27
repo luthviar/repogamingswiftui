@@ -11,7 +11,7 @@ import SwiftUI
 struct repogamingApp: App {
     var body: some Scene {
         WindowGroup {
-            ListGameView()
+            MainTabView()
         }
     }
 }

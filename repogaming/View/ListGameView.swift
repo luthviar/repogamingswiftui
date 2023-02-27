@@ -11,30 +11,64 @@ struct ListGameView: View {
     @StateObject private var viewModel = ListGameViewModel()
     @State private var isLoading: Bool = false
     @State private var searchText: String = ""
+    @State private var showAlertFavorite: Bool = false
+    @State private var isChooseFavoriteState: Bool = false
     
     var body: some View {
         NavigationView {
             VStack {
                 List(searchResults) { game in
-                    NavigationLink(
-                        destination:
-                            DetailGameView(
-                                viewModel:
-                                    DetailGameViewModel(
-                                        gameItem: game
-                                    )
-                            )
-                    ) {
-                        ItemGameView(game: game)
-                            .onAppear {
-                                if isNeedToLoadMore(showedGameItem: game) {
-                                    loadPage(next: true)
-                                }
+                    HStack(spacing: isChooseFavoriteState ? 20 : 0) {
+                        if isChooseFavoriteState {
+                            HStack {
+                                Image(systemName: "plus.circle")
+                                    .resizable()
+                                    .frame(width: 30, height: 30)
+                                    .transition(.slide.combined(with: .opacity))
                             }
+                            .frame(width: 60, height: 60)
+                            .onTapGesture {
+                                showAlertFavorite = true
+                            }
+                            .alert(isPresented: $showAlertFavorite) {
+                                Alert(
+                                    title: Text("You have successfully added the game to your favorite list"),
+                                    message: Text("Tap long press to one of your favorite game"),
+                                    dismissButton: .default(Text("OK"))
+                                )
+                            }
+                        }
+                        NavigationLink(
+                            destination:
+                                DetailGameView(
+                                    viewModel:
+                                        DetailGameViewModel(
+                                            gameItem: game
+                                        )
+                                )
+                        ) {
+                            ItemGameView(game: game)
+                                .onAppear {
+                                    if isNeedToLoadMore(showedGameItem: game) {
+                                        loadPage(next: true)
+                                    }
+                                }
+                        }
                     }
                 }
                 .navigationTitle("Games")
                 .navigationBarItems(
+                    leading:
+                        Button(action: {
+                            withAnimation(.easeInOut) {
+                                isChooseFavoriteState.toggle()
+                            }
+                        }) {
+                            Image(systemName: "heart.circle")
+                                .foregroundColor(.red)
+                            Text("Select Favorite")
+                                .foregroundColor(.red)
+                        },
                     trailing:
                         NavigationLink(destination: AboutView()) {
                             HStack {
