@@ -21,63 +21,16 @@ struct ListGameView: View {
                             DetailGameView(
                                 viewModel:
                                     DetailGameViewModel(
-                                        gameId: game.id ?? 0,
-                                        gameName: game.name ?? ""
+                                        gameItem: game
                                     )
                             )
                     ) {
-                        HStack {
-                            AsyncImage(url: URL(string: game.backgroundImage ?? "")) { phase in
-                                switch phase {
-                                case .empty:
-                                    ProgressView()
-                                        .frame(
-                                            width: 80,
-                                            height: 80
-                                        )
-                                        .cornerRadius(8)
-                                        .scaledToFit()
-                                case .success(let image):
-                                    image
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .frame(
-                                            width: 80,
-                                            height: 80
-                                        )
-                                        .background(Color.black)
-                                        .cornerRadius(20)
-                                        .padding(.trailing, 4)
-                                case .failure:
-                                    Image(systemName: "exclamationmark.icloud.fill")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .frame(
-                                            width: 80,
-                                            height: 80
-                                        )
-                                        .background(Color.black)
-                                        .cornerRadius(20)
-                                        .padding(.trailing, 4)
-                                @unknown default:
-                                    fatalError()
+                        ItemGameView(game: game)
+                            .onAppear {
+                                if isNeedToLoadMore(showedGameItem: game) {
+                                    loadPage(next: true)
                                 }
                             }
-                            VStack(alignment: .leading, spacing: 8.0) {
-                                Text(game.name ?? "")
-                                    .font(.system(size: 25, weight: .bold))
-                                
-                                Text("Release: \(getReleaseDate(game))")
-                                    .lineLimit(2)
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
-                            }
-                        }
-                        .onAppear {
-                            if isNeedToLoadMore(showedGameItem: game) {
-                                loadPage(next: true)
-                            }
-                        }
                     }
                 }
                 .navigationTitle("Games")
@@ -141,10 +94,6 @@ struct ListGameView: View {
     private func isNeedToLoadMore(showedGameItem: GameItem) -> Bool {
         let isNeedIt: Bool = ((showedGameItem.slug ?? "-") == (viewModel.games.last?.slug ?? "+"))
         return isNeedIt
-    }
-    
-    private func getReleaseDate(_ gameItem: GameItem) -> String {
-        return gameItem.released?.changeDateFormat(from: "yyyy-MM-dd", to: "dd MMMM yyyy") ?? "-"
     }
     
 }

@@ -18,7 +18,7 @@ struct DetailGameView: View {
     private var urlWebsiteGame: URL {
         var urlWebsiteString: String = viewModel.detailGame?.website ?? ""
         if urlWebsiteString.isEmpty {
-            urlWebsiteString = "https://www.google.com/search?q=\(viewModel.gameName.components(separatedBy: " ")[0])"
+            urlWebsiteString = "https://www.google.com/search?q=\((viewModel.gameItem.name ?? " ").components(separatedBy: " ")[0])"
         }
         return URL(string: urlWebsiteString)!
     }
@@ -28,9 +28,9 @@ struct DetailGameView: View {
             ScrollView {
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack {
-                        CarouselItem(urlString: viewModel.detailGame?.backgroundImage ?? "")
+                        ItemCarousel(urlString: viewModel.detailGame?.backgroundImage ?? "")
                         ForEach(viewModel.screenshots, id: \.id) { screenshot in
-                            CarouselItem(urlString: screenshot.image ?? "")
+                            ItemCarousel(urlString: screenshot.image ?? "")
                         }
                     }
                     .frame(minHeight: Constants.heightImageCarousel)
@@ -41,12 +41,23 @@ struct DetailGameView: View {
                     .foregroundColor(Color.gray)
                     .padding(.bottom, 10)
                 
-                Text(viewModel.gameName)
+                Text(viewModel.gameItem.name ?? "")
                     .font(.subheadline)
                     .bold()
                 Text("Release: \(releaseDate)")
                     .font(.subheadline)
                     .padding([.bottom, .leading, .trailing])
+                HStack(spacing: 2) {
+                    Image(systemName: "star.fill")
+                        .resizable()
+                        .frame(width: 15, height: 15)
+                        .foregroundColor(.yellow)
+                    Text("\(Utils.roundToOneDecimal(viewModel.gameItem.rating ?? 0))")
+                        .font(.system(size: 13))
+                    Text("(\(viewModel.gameItem.ratingsCount ?? 0))")
+                        .foregroundColor(.gray)
+                        .font(.system(size: 13))
+                }
                 
                 Divider()
                 
@@ -67,7 +78,7 @@ struct DetailGameView: View {
                                                                               
             }
         }
-        .navigationTitle(viewModel.gameName)
+        .navigationTitle(viewModel.gameItem.name ?? "")
         .navigationBarItems(
             trailing:
                 Link(destination: urlWebsiteGame, label: {
@@ -84,46 +95,4 @@ struct DetailGameView: View {
     }
 }
 
-struct CarouselItem: View {
-    
-    let urlString: String
-    
-    
-    var body: some View {
-        AsyncImage(url: URL(string: urlString)) { phase in
-            switch phase {
-            case .empty:
-                ProgressView()
-                    .frame(
-                        width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width * 20 / 100),
-                        height: Constants.heightImageCarousel
-                    )
-                    .cornerRadius(8)
-                    .scaledToFit()
-            case .success(let image):
-                NavigationLink(destination: ImageZoomView(image: image)) {
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(
-                            width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width * 20 / 100),
-                            height: Constants.heightImageCarousel
-                        )
-                        .cornerRadius(8)
-                }
-            case .failure:
-                Image(systemName: "exclamationmark.icloud.fill")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(
-                        width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width * 20 / 100),
-                        height: Constants.heightImageCarousel
-                    )
-                    .cornerRadius(8)
-            @unknown default:
-                fatalError()
-            }
-        }
-    }
-    
-}
+
