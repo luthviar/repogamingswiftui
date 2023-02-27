@@ -8,8 +8,8 @@
 import Foundation
 
 struct Utils {
-    static func getReleaseDate(_ gameItem: GameItem) -> String {
-        return gameItem.released?.changeDateFormat(from: "yyyy-MM-dd", to: "dd MMMM yyyy") ?? "-"
+    static func getReleaseDate(_ releaseDate: String) -> String {
+        return releaseDate.changeDateFormat(from: "yyyy-MM-dd", to: "dd MMMM yyyy") ?? "-"
     }
     static func roundToOneDecimal(_ num: Float) -> String {
         let number: Float = num

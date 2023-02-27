@@ -18,7 +18,7 @@ struct DetailGameView: View {
     private var urlWebsiteGame: URL {
         var urlWebsiteString: String = viewModel.detailGame?.website ?? ""
         if urlWebsiteString.isEmpty {
-            urlWebsiteString = "https://www.google.com/search?q=\((viewModel.gameItem.name ?? " ").components(separatedBy: " ")[0])"
+            urlWebsiteString = "https://www.google.com/search?q=\(viewModel.gameItem.name.components(separatedBy: " ")[0])"
         }
         return URL(string: urlWebsiteString)!
     }
@@ -41,7 +41,7 @@ struct DetailGameView: View {
                     .foregroundColor(Color.gray)
                     .padding(.bottom, 10)
                 
-                Text(viewModel.gameItem.name ?? "")
+                Text(viewModel.gameItem.name)
                     .font(.subheadline)
                     .bold()
                 Text("Release: \(releaseDate)")
@@ -52,9 +52,9 @@ struct DetailGameView: View {
                         .resizable()
                         .frame(width: 15, height: 15)
                         .foregroundColor(.yellow)
-                    Text("\(Utils.roundToOneDecimal(viewModel.gameItem.rating ?? 0))")
+                    Text("\(Utils.roundToOneDecimal(viewModel.gameItem.rating))")
                         .font(.system(size: 13))
-                    Text("(\(viewModel.gameItem.ratingsCount ?? 0))")
+                    Text("(\(viewModel.gameItem.ratingsCount))")
                         .foregroundColor(.gray)
                         .font(.system(size: 13))
                 }
@@ -78,7 +78,7 @@ struct DetailGameView: View {
                                                                               
             }
         }
-        .navigationTitle(viewModel.gameItem.name ?? "")
+        .navigationTitle(viewModel.gameItem.name)
         .navigationBarItems(
             trailing:
                 Link(destination: urlWebsiteGame, label: {

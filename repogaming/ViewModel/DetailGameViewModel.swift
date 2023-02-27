@@ -9,9 +9,9 @@ import SwiftUI
 
 @MainActor class DetailGameViewModel: ObservableObject {
         
-    let gameItem: GameItem
+    let gameItem: GameItemRealmModel
     
-    init(gameItem: GameItem) {
+    init(gameItem: GameItemRealmModel) {
         self.gameItem = gameItem
     }
         
@@ -21,13 +21,13 @@ import SwiftUI
     @Published private(set) var screenshots: [Screenshot] = []
     
     func loadDetailGame() async throws {
-        let response = try await gameService.fetchDetailGame(id: gameItem.id ?? 0)
+        let response = try await gameService.fetchDetailGame(id: gameItem.id)
         guard let response = response else { return }
         detailGame = response
     }
     
     func loadScreenshots() async throws {
-        let response = try await gameService.fetchGameScreenshots(gameId: gameItem.id ?? 0)
+        let response = try await gameService.fetchGameScreenshots(gameId: gameItem.id)
         guard let response = response else { return }
         guard let resScreenshots = response.results else { return }
         screenshots = resScreenshots

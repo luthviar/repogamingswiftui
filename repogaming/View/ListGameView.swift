@@ -13,6 +13,7 @@ struct ListGameView: View {
     @State private var searchText: String = ""
     @State private var showAlertFavorite: Bool = false
     @State private var isChooseFavoriteState: Bool = false
+    @State private var showAlertFavoriteHasBeenAdded: Bool = false
     
     var body: some View {
         NavigationView {
@@ -25,15 +26,23 @@ struct ListGameView: View {
                                     .resizable()
                                     .frame(width: 30, height: 30)
                                     .transition(.slide.combined(with: .opacity))
+                                    .foregroundColor(.mint)
                             }
                             .frame(width: 60, height: 60)
                             .onTapGesture {
-                                showAlertFavorite = true
+                                viewModel.addGame(game: game) { isAdded in
+                                    showAlertFavorite = true
+                                    if isAdded {
+                                        showAlertFavoriteHasBeenAdded = false
+                                    } else {
+                                        showAlertFavoriteHasBeenAdded = true
+                                    }
+                                }
                             }
                             .alert(isPresented: $showAlertFavorite) {
                                 Alert(
-                                    title: Text("You have successfully added the game to your favorite list"),
-                                    message: Text("Tap long press to one of your favorite game"),
+                                    title: Text(!showAlertFavoriteHasBeenAdded ? "You have successfully added the game to your favorite list" : "The game has been added to your favorite list before"),
+                                    message: Text(""),
                                     dismissButton: .default(Text("OK"))
                                 )
                             }
@@ -43,11 +52,11 @@ struct ListGameView: View {
                                 DetailGameView(
                                     viewModel:
                                         DetailGameViewModel(
-                                            gameItem: game
+                                            gameItem: viewModel.getRealmModel(game: game)
                                         )
                                 )
                         ) {
-                            ItemGameView(game: game)
+                            ItemGameView(game: viewModel.getRealmModel(game: game))
                                 .onAppear {
                                     if isNeedToLoadMore(showedGameItem: game) {
                                         loadPage(next: true)
@@ -65,9 +74,9 @@ struct ListGameView: View {
                             }
                         }) {
                             Image(systemName: "heart.circle")
-                                .foregroundColor(.red)
+                                .foregroundColor(.mint)
                             Text("Select Favorite")
-                                .foregroundColor(.red)
+                                .foregroundColor(.mint)
                         },
                     trailing:
                         NavigationLink(destination: AboutView()) {

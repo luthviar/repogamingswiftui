@@ -10,3 +10,5 @@ import Foundation
 struct Constants {
     static let heightImageCarousel: CGFloat = 250
 }
+
+typealias BoolCompletion = (Bool) -> Void
