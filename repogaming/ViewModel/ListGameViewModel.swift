@@ -69,30 +69,6 @@ import RealmSwift
         completion(true)
     }
     
-    func deleteGame(game: GameItem) {
-        let theGame = getRealmModel(game: game)
-        do {
-            try realm.write {
-                realm.delete(theGame)
-            }
-        } catch {
-            fatalError("Failed to delete game from Realm database: \(error.localizedDescription)")
-        }
-        getGames()
-    }
-    
-    func updateGame(game: GameItem) {
-        let theGame = getRealmModel(game: game)
-        do {
-            try realm.write {
-                realm.add(theGame, update: .all)
-            }
-        } catch {
-            fatalError("Failed to update game in Realm database: \(error.localizedDescription)")
-        }
-        getGames()
-    }
-    
     func getRealmModel(game: GameItem) -> GameItemRealmModel {
         let newGame = GameItemRealmModel()
         newGame.id = game.id ?? 0

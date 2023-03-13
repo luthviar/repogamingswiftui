@@ -27,22 +27,6 @@ import RealmSwift
         gamesRealm = Array(realmGames)
     }
     
-    func deleteGame(game: GameItemRealmModel) {
-        guard let index = gamesRealm.firstIndex(of: game) else { return }
-        let offsets = IndexSet(integer: index)
-        
-        gamesRealm.remove(atOffsets: offsets)
-        
-        guard let realm = try? Realm() else {
-            return
-        }
-        
-        try? realm.write {
-            realm.delete(game)
-        }        
-                  
-    }
-    
     func deleteGame(at offsets: IndexSet) {
         do {
             let realm = try Realm()
@@ -56,7 +40,6 @@ import RealmSwift
             print("Error deleting game: \(error)")
         }
     }
-    
 }
 
 
